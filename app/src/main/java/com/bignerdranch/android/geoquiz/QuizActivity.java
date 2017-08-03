@@ -10,6 +10,7 @@ import android.widget.Toast;
 public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mPrevButton;
     private Button mNextButton;
     private TextView mQuestionTextView;
 
@@ -30,6 +31,12 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoNextQuestion();
+            }
+        });
 
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener(){
@@ -47,12 +54,19 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
+        mPrevButton = (Button) findViewById(R.id.prev_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoPreviousQuestion();
+            }
+        });
+
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updateQuestion();
+                gotoNextQuestion();
             }
         });
 
@@ -77,4 +91,19 @@ public class QuizActivity extends AppCompatActivity {
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
+
+    private void gotoNextQuestion(){
+        mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+        updateQuestion();
+    }
+
+    private void gotoPreviousQuestion(){
+        if (mCurrentIndex == 0){
+            mCurrentIndex = (mQuestionBank.length - 1);
+        } else {
+            mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
+        }
+        updateQuestion();
+    }
+
 }
